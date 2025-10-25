@@ -75,7 +75,7 @@ cd frontend
 npm install
 npm start
 
-Frontend desplegado: [https://test-react-frontend.netlify.app](https://test-react-frontend.netlify.app)
+No llegue a desplegar publicamente el frontend.
 Backend desplegado: [https://test-react-production.up.railway.app/ping](https://test-react-production.up.railway.app/ping)
 Repositorio completo: https://github.com/VeronicaConti/test-react
 
