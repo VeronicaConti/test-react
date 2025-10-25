@@ -73,3 +73,8 @@ node server.js
 cd frontend
 npm install
 npm start
+
+Frontend desplegado: https://test-react-frontend.netlify.app
+Backend desplegado: https://test-react-production.up.railway.app/ping
+Repositorio completo: https://github.com/VeronicaConti/test-react
+
