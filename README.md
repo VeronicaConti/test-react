@@ -1,8 +1,11 @@
 Test React
+
 Autora: Veronica Daniela Conti
 Fecha: 24/10/2025
-Repositorio: https://github.com/VeronicaConti/test-react
-Demo backend: https://test-react-production.up.railway.app/ping
+Repositorio: 
+https://github.com/VeronicaConti/test-react
+Demo backend: 
+https://test-react-production.up.railway.app/ping
 
 tecnologías
 Frontend: React + React Router
@@ -100,6 +103,7 @@ Notas
 # La URI de PostgreSQL fue migrada a variables de entorno para evitar leaks.
 # El backend está listo para producción y fue testeado localmente
 # Todo el código fue migrado en la rama main, incluyendo backend, frontend y documentación.
+
 
 
 
