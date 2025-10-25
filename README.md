@@ -31,7 +31,7 @@ test-react/
 
 ---
 
-## 🧪 Descripción del test
+## Descripción del test
 
 Se desarrolló una aplicación con dos vistas principales:
 
@@ -42,12 +42,12 @@ El backend expone el endpoint `/ping` que valida la conexión con PostgreSQL usa
 
 ---
 
-## ⚠️ Problemas enfrentados
+## Problemas enfrentados
 
-- ❌ Error de autenticación con PostgreSQL
-- ❌ Variables mal configuradas en Railway (`${{ Postgres.DATABASE_URL }}`)
-- ❌ Subrepositorios Git en carpetas internas (`.git` en `backend/` y `frontend/`)
-- ❌ Ruta `/` no definida en el backend (`Cannot GET /`)
+- Error de autenticación con PostgreSQL, no se podian guardar ni acceder a los datos en las tablas.
+- Variables mal configuradas en Railway (`${{ Postgres.DATABASE_URL }}`)
+- Subrepositorios Git en carpetas internas (`.git` en `backend/` y `frontend/`)
+-  Ruta `/` no definida en el backend (`Cannot GET /`)
 
 ---
 
