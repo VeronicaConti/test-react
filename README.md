@@ -7,7 +7,7 @@
 
 ---
 
-## tecnologias
+## tecnologías
 
 - **Frontend:** React + React Router
 - **Backend:** Node.js + Express
@@ -69,12 +69,13 @@ cd backend
 npm install
 node server.js
 
+
 ### Frontend
 cd frontend
 npm install
 npm start
 
-Frontend desplegado: https://test-react-frontend.netlify.app
-Backend desplegado: https://test-react-production.up.railway.app/ping
+Frontend desplegado: [https://test-react-frontend.netlify.app](https://test-react-frontend.netlify.app)
+Backend desplegado: [https://test-react-production.up.railway.app/ping](https://test-react-production.up.railway.app/ping)
 Repositorio completo: https://github.com/VeronicaConti/test-react
 
