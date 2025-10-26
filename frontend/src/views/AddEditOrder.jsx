@@ -19,7 +19,6 @@ function AddEditOrder() {
     setDate(formattedDate);
 
     if (isEdit) {
-      // Si querés implementar edición real, se puede agregar fetch aquí
       setOrderNumber('A001');
       setProductsCount(3);
       setFinalPrice(150.0);
@@ -51,7 +50,7 @@ function AddEditOrder() {
       finalPrice
     };
 
-    fetch('http://localhost:3001/orders', {
+    fetch('https://test-react-production.up.railway.app/orders', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)

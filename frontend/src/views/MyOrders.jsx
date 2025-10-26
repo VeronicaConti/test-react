@@ -6,17 +6,25 @@ function MyOrders() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const navigate = useNavigate();
 
-  // 🔄 Obtener pedidos desde el backend
   useEffect(() => {
-    fetch('http://localhost:3001/orders')
+    fetch('https://test-react-production.up.railway.app/orders')
       .then(res => res.json())
-      .then(data => setOrders(data))
-      .catch(err => console.error('Error fetching orders:', err));
+      .then(data => {
+        if (Array.isArray(data)) {
+          setOrders(data);
+        } else {
+          console.error('Respuesta inesperada del backend:', data);
+          setOrders([]);
+        }
+      })
+      .catch(err => {
+        console.error('Error fetching orders:', err);
+        setOrders([]);
+      });
   }, []);
 
-  // 🗑️ Eliminar pedido
   const handleDelete = (id) => {
-    fetch(`http://localhost:3001/orders/${id}`, {
+    fetch(`https://test-react-production.up.railway.app/orders/${id}`, {
       method: 'DELETE'
     })
       .then(() => {
@@ -97,7 +105,6 @@ function MyOrders() {
         </table>
       )}
 
-      {/* 🧾 Modal de detalle */}
       {selectedOrder && (
         <div style={{
           position: 'fixed',
@@ -114,26 +121,36 @@ function MyOrders() {
         }}>
           <h2>Order Details: {selectedOrder.orderNumber}</h2>
           <p>Date: {selectedOrder.date}</p>
-          <table border="1" cellPadding="8" cellSpacing="0" style={{ width: '100%', marginTop: '1rem' }}>
-            <thead>
-              <tr>
-                <th>Product</th>
-                <th>Unit Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedOrder.products?.map((p, i) => (
-                <tr key={i}>
-                  <td>{p.name}</td>
-                  <td>${p.unitPrice.toFixed(2)}</td>
-                  <td>{p.qty}</td>
-                  <td>${p.totalPrice.toFixed(2)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+          {(() => {
+            const parsedProducts = Array.isArray(selectedOrder.products)
+              ? selectedOrder.products
+              : JSON.parse(selectedOrder.products || '[]');
+
+            return (
+              <table border="1" cellPadding="8" cellSpacing="0" style={{ width: '100%', marginTop: '1rem' }}>
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Unit Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {parsedProducts.map((p, i) => (
+                    <tr key={i}>
+                      <td>{p.name}</td>
+                      <td>${p.unitPrice.toFixed(2)}</td>
+                      <td>{p.qty}</td>
+                      <td>${p.totalPrice.toFixed(2)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            );
+          })()}
+
           <button
             onClick={() => setSelectedOrder(null)}
             style={{

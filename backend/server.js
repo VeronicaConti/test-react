@@ -28,16 +28,9 @@ app.get('/orders', async (req, res) => {
   }
 });
 
-// 📝 Crear nueva orden con cálculo automático
+// 📝 Crear nueva orden (versión simple, sin products)
 app.post('/orders', async (req, res) => {
-  const { orderNumber, date, products } = req.body;
-
-  if (!Array.isArray(products)) {
-    return res.status(400).json({ error: 'El campo products debe ser un array' });
-  }
-
-  const productsCount = products.length;
-  const finalPrice = products.reduce((acc, p) => acc + (p.price || 0), 0);
+  const { orderNumber, date, productsCount, finalPrice } = req.body;
 
   try {
     const result = await pool.query(

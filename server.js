@@ -27,21 +27,14 @@ app.get('/orders', async (req, res) => {
   }
 });
 
-// 📝 Crear nueva orden (con cálculo automático y almacenamiento de products)
+// 📝 Crear nueva orden (sin cálculo automático)
 app.post('/orders', async (req, res) => {
-  const { orderNumber, date, products } = req.body;
-
-  if (!Array.isArray(products)) {
-    return res.status(400).json({ error: 'El campo products debe ser un array' });
-  }
-
-  const productsCount = products.length;
-  const finalPrice = products.reduce((acc, p) => acc + (p.totalPrice || 0), 0);
+  const { orderNumber, date, productsCount, finalPrice } = req.body;
 
   try {
     const result = await pool.query(
-      'INSERT INTO orders (orderNumber, date, productsCount, finalPrice, products) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [orderNumber, date, productsCount, finalPrice, JSON.stringify(products)]
+      'INSERT INTO orders (orderNumber, date, productsCount, finalPrice) VALUES ($1, $2, $3, $4) RETURNING *',
+      [orderNumber, date, productsCount, finalPrice]
     );
     res.json(result.rows[0]);
   } catch (err) {
