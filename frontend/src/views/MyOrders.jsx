@@ -63,7 +63,7 @@ function MyOrders() {
                 <td>{order.orderNumber}</td>
                 <td>{order.date}</td>
                 <td>{order.productsCount}</td>
-                <td>${order.finalPrice.toFixed(2)}</td>
+                <td>${order.finalPrice ? order.finalPrice.toFixed(2) : '—'}</td>
                 <td>
                   <button
                     onClick={() => setSelectedOrder(order)}
