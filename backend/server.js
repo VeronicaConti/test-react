@@ -28,8 +28,9 @@ app.get('/orders', async (req, res) => {
   }
 });
 
-// 📝 Crear nueva orden (versión simple, sin products)
+// Crear nueva orden 
 app.post('/orders', async (req, res) => {
+  console.log('BODY RECIBIDO:', req.body);
   const { orderNumber, date, productsCount, finalPrice } = req.body;
 
   try {

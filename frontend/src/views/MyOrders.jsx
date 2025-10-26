@@ -3,50 +3,47 @@ import { useNavigate } from 'react-router-dom';
 
 function MyOrders() {
   const [orders, setOrders] = useState([]);
-  const [selectedOrder, setSelectedOrder] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch('https://test-react-production.up.railway.app/orders')
+  const fetchOrders = () => {
+    fetch('http://localhost:3001/orders')
       .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data)) {
-          setOrders(data);
-        } else {
-          console.error('Respuesta inesperada del backend:', data);
-          setOrders([]);
-        }
-      })
-      .catch(err => {
-        console.error('Error fetching orders:', err);
-        setOrders([]);
-      });
+      .then(data => setOrders(data))
+      .catch(err => console.error('Error al obtener órdenes:', err));
+  };
+
+  useEffect(() => {
+    fetchOrders();
   }, []);
 
   const handleDelete = (id) => {
-    fetch(`https://test-react-production.up.railway.app/orders/${id}`, {
+    if (!window.confirm('Are you sure you want to delete this order?')) return;
+
+    fetch(`http://localhost:3001/orders/${id}`, {
       method: 'DELETE'
     })
       .then(() => {
-        const updated = orders.filter(o => o.id !== id);
-        setOrders(updated);
+        alert('Order deleted successfully!');
+        fetchOrders(); // refresca la tabla
       })
-      .catch(err => console.error('Error deleting order:', err));
+      .catch(err => {
+        console.error('Error deleting order:', err);
+        alert('Error deleting order.');
+      });
   };
 
   return (
     <div style={{ padding: '2rem' }}>
       <h1>My Orders</h1>
-
       <button
         onClick={() => navigate('/add-order')}
         style={{
-          marginBottom: '1rem',
-          backgroundColor: '#2196F3',
+          backgroundColor: '#007bff',
           color: 'white',
           padding: '0.5rem 1rem',
           border: 'none',
-          cursor: 'pointer'
+          cursor: 'pointer',
+          marginBottom: '1rem'
         }}
       >
         New Order
@@ -55,9 +52,10 @@ function MyOrders() {
       {orders.length === 0 ? (
         <p>No orders found.</p>
       ) : (
-        <table border="1" cellPadding="10" cellSpacing="0" style={{ width: '100%' }}>
+        <table border="1" cellPadding="10" cellSpacing="0">
           <thead>
             <tr>
+              <th>ID</th>
               <th>Order #</th>
               <th>Date</th>
               <th># Products</th>
@@ -66,21 +64,22 @@ function MyOrders() {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
+            {orders.map(order => (
               <tr key={order.id}>
-                <td>{order.orderNumber}</td>
-                <td>{order.date}</td>
-                <td>{order.productscount}</td>
-                <td>${order.finalprice ? order.finalprice.toFixed(2) : '—'}</td>
+                <td>{order.id}</td>
+                <td>{order.ordernumber}</td>
+                <td>{order.date.split('T')[0]}</td>
+                <td>{order.productscount ?? '-'}</td>
+                <td>{order.finalprice ? `$${order.finalprice}` : '-'}</td>
                 <td>
                   <button
-                    onClick={() => setSelectedOrder(order)}
+                    onClick={() => navigate(`/orders/${order.id}`)}
                     style={{
-                      backgroundColor: '#FFB74D',
-                      color: 'black',
+                      marginRight: '0.5rem',
+                      backgroundColor: '#17a2b8',
+                      color: 'white',
                       border: 'none',
                       padding: '0.3rem 0.6rem',
-                      marginRight: '0.5rem',
                       cursor: 'pointer'
                     }}
                   >
@@ -89,7 +88,7 @@ function MyOrders() {
                   <button
                     onClick={() => handleDelete(order.id)}
                     style={{
-                      backgroundColor: '#f44336',
+                      backgroundColor: '#dc3545',
                       color: 'white',
                       border: 'none',
                       padding: '0.3rem 0.6rem',
@@ -103,68 +102,6 @@ function MyOrders() {
             ))}
           </tbody>
         </table>
-      )}
-
-      {selectedOrder && (
-        <div style={{
-          position: 'fixed',
-          top: '15%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '50%',
-          backgroundColor: '#FFF8F0',
-          border: '1px solid #ccc',
-          borderRadius: '8px',
-          padding: '1.5rem',
-          zIndex: 1000,
-          boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
-        }}>
-          <h2>Order Details: {selectedOrder.orderNumber}</h2>
-          <p>Date: {selectedOrder.date}</p>
-
-          {(() => {
-            const parsedProducts = Array.isArray(selectedOrder.products)
-              ? selectedOrder.products
-              : JSON.parse(selectedOrder.products || '[]');
-
-            return (
-              <table border="1" cellPadding="8" cellSpacing="0" style={{ width: '100%', marginTop: '1rem' }}>
-                <thead>
-                  <tr>
-                    <th>Product</th>
-                    <th>Unit Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {parsedProducts.map((p, i) => (
-                    <tr key={i}>
-                      <td>{p.name}</td>
-                      <td>${p.unitPrice.toFixed(2)}</td>
-                      <td>{p.qty}</td>
-                      <td>${p.totalPrice.toFixed(2)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            );
-          })()}
-
-          <button
-            onClick={() => setSelectedOrder(null)}
-            style={{
-              marginTop: '1rem',
-              backgroundColor: '#2196F3',
-              color: 'white',
-              padding: '0.5rem 1rem',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            Close
-          </button>
-        </div>
       )}
     </div>
   );
